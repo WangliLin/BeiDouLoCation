@@ -41,7 +41,7 @@ import java.util.Locale;
  *  邮箱 784787081@qq.com
  */
 
-public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter> implements HomeContract.View {
+public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener {
 
     private static final int MATRIX_SIZE = 9;
     private final float MAX_ROATE_DEGREE = 1.0f;
@@ -628,5 +628,22 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         tv_sunset = (TextView) view.findViewById(R.id.tv_sunset);
         ll_connect = (LinearLayout) view.findViewById(R.id.ll_connect);
 
+        initListener();
+
+    }
+
+    /**
+     * 初始化
+     */
+    private void initListener() {
+        ll_connect.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ll_connect:
+                break;
+        }
     }
 }
