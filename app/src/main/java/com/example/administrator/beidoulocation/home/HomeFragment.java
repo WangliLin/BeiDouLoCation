@@ -38,7 +38,7 @@ import java.util.Locale;
 
 /**
  * MVPPlugin
- *  邮箱 784787081@qq.com
+ *  修改注释
  */
 
 public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener {
