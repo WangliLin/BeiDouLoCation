@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppCustormTheme" />
+
+    <style name="AppCustormTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <!--设置窗口的背景颜色-->
+        <item name="android:windowBackground">@color/dingdingbg</item>
+        <!--toolbar的颜色-->
+        <item name="colorPrimary">@color/material_green_300</item>
+        <!--状态栏的颜色-->
+        <item name="colorPrimaryDark">@color/material_green_700</item>
+
+    </style>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.beidoulocation.MainActivity">
+
+    <include layout="@layout/toolbar" />
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/dl_left"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:id="@+id/fra_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/background">
+
+                <RadioButton
+                    android:id="@+id/rb_home"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableTop="@drawable/rb_bg_home"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="首页"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_trrain"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableTop="@drawable/rb_bg_trrain"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="地形图"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+                <RadioButton
+                    android:id="@+id/rb_map"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableTop="@drawable/rb_bg_map"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="离线地图"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_gravity="start"
+            android:clickable="true"
+            android:layout_width="180dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#666666"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rel_head"
+                android:layout_width="match_parent"
+                android:layout_height="140dp">
+
+                <!--beidou:border_width="1dp"
+                阴影的宽度
+                beidou:border_color="@color/colorAccent"
+                阴影的颜色-->
+                <com.example.administrator.beidoulocation.view.CircleImageView
+                    android:id="@+id/civ_user_head"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/header_default"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/civ_user_head"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="8dp"
+                    android:text="用户名"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rl_setting"
+                    android:layout_marginTop="5dp"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_setting"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/setting"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="设置中心"
+                        android:layout_toRightOf="@id/iv_setting"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        />
+                </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rl_version"
+                    android:layout_marginTop="25dp"
+                    android:layout_below="@id/rl_setting"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_version"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/updata"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="版本更新"
+                        android:layout_toRightOf="@id/iv_version"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.DrawerLayout>
+</RelativeLayout>

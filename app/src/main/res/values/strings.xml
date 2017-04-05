@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">北斗定位</string>
+
+    <string name="open_draw">侧滑打开</string>
+    <string name="close_draw">侧滑关闭</string>
+
+
+    <string name="getting_location">Getting location&#8230;</string>
+    <string name="cannot_get_location">Cannot get your location</string>
+    <string name="location_north">%s N</string>
+    <string name="location_south">%s S</string>
+    <string name="location_east">%s E</string>
+    <string name="location_west">%s W</string>
+    <string name="calibrate_success">Calibration complete</string>
+</resources>
