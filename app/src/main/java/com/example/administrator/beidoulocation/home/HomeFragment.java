@@ -39,6 +39,7 @@ import java.util.Locale;
 /**
  * MVPPlugin
  *  修改注释
+ *  
  */
 
 public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener {
