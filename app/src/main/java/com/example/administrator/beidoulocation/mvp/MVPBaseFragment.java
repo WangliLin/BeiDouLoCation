@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -14,11 +17,13 @@ import java.lang.reflect.ParameterizedType;
 
 public abstract class MVPBaseFragment<V extends BaseView,T extends BasePresenterImpl<V>> extends Fragment implements BaseView{
     public T mPresenter;
+    public Context context;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter= getInstance(this,1);
         mPresenter.attachView((V) this);
+        context = getActivity();
     }
 
     @Override
@@ -49,4 +54,48 @@ public abstract class MVPBaseFragment<V extends BaseView,T extends BasePresenter
             }
             return null;
         }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = View.inflate(getActivity(), getLayoutResId(), null);
+        //1. 查找控件
+        initView(view);
+        //2. 设置监听
+        initListener();
+        //3. 设置数据
+        initData();
+        return view;
+    }
+
+
+
+    /**
+     * 获取当前fragment对应的布局id
+     * @return
+     */
+    public abstract int getLayoutResId() ;
+
+
+    /**
+     * 初始化view:
+     * 查找控件
+     * @param view
+     */
+    public abstract void initView(View view) ;
+
+
+
+    /**
+     * 初始化监听
+     */
+    public abstract void initListener() ;
+
+
+
+    /**
+     * 初始化数据
+     * 给控件设置内容
+     */
+    public abstract void initData() ;
+
 }

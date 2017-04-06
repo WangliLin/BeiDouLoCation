@@ -17,11 +17,9 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
@@ -42,7 +40,7 @@ import java.util.Locale;
  *  
  */
 
-public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener {
+public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener {
 //测试IAE   A
     private static final int MATRIX_SIZE = 9;
     private final float MAX_ROATE_DEGREE = 1.0f;
@@ -70,7 +68,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
     private View mViewGuide;
     private AnimationDrawable mGuideAnimation;
     private Vibrator mVibrator;
-    private Context context;
+//    private Context context;
 
     private static final int MAX_ACCURATE_COUNT = 20;
     private static final int MAX_INACCURATE_COUNT = 20;
@@ -150,19 +148,26 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         }
     };
 
-    @Nullable
+//    @Nullable
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+//        context = getActivity();
+//        View view = View.inflate(getActivity(), R.layout.fragment_home,
+//                null);
+//        initView(view);
+//        initLayout(view);
+//        initServices();
+//        return view;
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        context = getActivity();
-        View view = View.inflate(getActivity(), R.layout.fragment_home,
-                null);
-        initView(view);
-        initLayout(view);
-        initServices();
-        return view;
+    public int getLayoutResId() {
+        return R.layout.fragment_home;
     }
 
-    private void initView(View view) {
+
+    @Override
+    public void initView(View view) {
         mDirection = 0.0f;
         mTargetDirection = 0.0f;
         mInterpolator = new AccelerateInterpolator();
@@ -176,14 +181,14 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
         mPointer.setImageResource(R.drawable.compass);
 
-        //mViewGuide = view.findViewById(R.id.view_guide);
+//        mViewGuide = view.findViewById(R.id.view_guide);
 
         //ImageView animationImage = (ImageView) view.findViewById(R.id.guide_animation);
 
         //mGuideAnimation = (AnimationDrawable) animationImage.getDrawable();
 
         mChinese = TextUtils.equals(Locale.getDefault().getLanguage(), "zh");
-
+        initLayout(view);
     }
 
     private void initServices() {
@@ -493,7 +498,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
                 Log.d("Compass", "accurate count = " + mAccurateCount);
 
                 if (mAccurateCount >= MAX_ACCURATE_COUNT) {
-                    switchMode(false);
+//                    switchMode(false);
                 }
 
             } else {
@@ -506,7 +511,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
                 Log.d("Compass", "inaccurate count = " + mInaccurateCount);
 
                 if (mInaccurateCount >= MAX_INACCURATE_COUNT) {
-                    switchMode(true);
+//                    switchMode(true);
                 }
             }
 
@@ -629,15 +634,21 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         tv_sunset = (TextView) view.findViewById(R.id.tv_sunset);
         ll_connect = (LinearLayout) view.findViewById(R.id.ll_connect);
 
-        initListener();
 
+        initServices();
     }
 
     /**
      * 初始化
      */
-    private void initListener() {
+    @Override
+    public void initListener() {
         ll_connect.setOnClickListener(this);
+    }
+
+    @Override
+    public void initData() {
+
     }
 
     @Override

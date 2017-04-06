@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.example.administrator.beidoulocation.home.HomeFragment;
 import com.example.administrator.beidoulocation.offlinemap.OfflineMapFragment;
 import com.example.administrator.beidoulocation.trrain.TrrainFragment;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SDKInitializer.initialize(getApplicationContext());
         context = this;
         setContentView(R.layout.activity_main);
         initView();
