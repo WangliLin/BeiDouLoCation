@@ -220,7 +220,6 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
         if (mLocationProvider != null) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -433,7 +432,6 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
         return image;
     }
 
-
     private void updateLocation(Location location) {
         if (location == null) {
             //mLocationTextView.setText(R.string.getting_location);
@@ -602,6 +600,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
         @Override
         public void onProviderEnabled(String provider) {
+
         }
 
         @Override
@@ -618,7 +617,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
     /**
      * ------------------------------------  拿到数据做展示的部分  经纬度，连接盒子的状态----------------------
      */
-
+//       UUID  0000ffe1-0000-1000-8000-00805f9b34f
     private TextView tv_box_id,tv_box_state,tv_longitude,tv_latitude;
     private TextView tv_signal,tv_electricity,tv_sunrise,tv_sunset;
     private LinearLayout ll_connect;
