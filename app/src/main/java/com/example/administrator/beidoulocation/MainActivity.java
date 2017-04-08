@@ -47,18 +47,32 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
                 new HomeFragment()).commit();
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            private OfflineMapFragment offlineMapFragment;
+            private TrrainFragment trrainFragment;
+            private HomeFragment homeFragment;
+
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 Fragment currentFragment = null;
                 switch (checkedId){
                     case R.id.rb_home:
-                        currentFragment = new HomeFragment();
+                        if (homeFragment == null) {
+                             homeFragment = new HomeFragment();
+                        }
+                        currentFragment = homeFragment;
                         break;
                     case R.id.rb_trrain:
-                        currentFragment = new TrrainFragment();
+                        if (trrainFragment == null) {
+                            trrainFragment = new TrrainFragment();
+                        }
+                        currentFragment = trrainFragment;
                         break;
                     case R.id.rb_map:
-                        currentFragment = new OfflineMapFragment();
+                        if (offlineMapFragment != null) {
+                            offlineMapFragment = new OfflineMapFragment();
+                        }
+                        currentFragment = offlineMapFragment;
                         break;
                 }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,

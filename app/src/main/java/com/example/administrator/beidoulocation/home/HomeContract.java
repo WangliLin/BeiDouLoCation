@@ -12,7 +12,7 @@ import com.example.administrator.beidoulocation.mvp.BaseView;
 
 public class HomeContract {
     interface View extends BaseView {
-        
+
     }
 
     interface  Presenter extends BasePresenter<View> {

@@ -40,7 +40,8 @@ import java.util.Locale;
  *  
  */
 
-public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter> implements HomeContract.View, View.OnClickListener {
+public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
+        implements HomeContract.View, View.OnClickListener {
 //测试IAE   A
     private static final int MATRIX_SIZE = 9;
     private final float MAX_ROATE_DEGREE = 1.0f;

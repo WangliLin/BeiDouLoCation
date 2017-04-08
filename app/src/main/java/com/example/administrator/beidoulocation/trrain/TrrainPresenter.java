@@ -1,7 +1,5 @@
 package com.example.administrator.beidoulocation.trrain;
 
-import android.content.Context;
-
 import com.example.administrator.beidoulocation.mvp.BasePresenterImpl;
 
 /**
@@ -10,5 +8,6 @@ import com.example.administrator.beidoulocation.mvp.BasePresenterImpl;
  */
 
 public class TrrainPresenter extends BasePresenterImpl<TrrainContract.View> implements TrrainContract.Presenter{
-    
+
+
 }
