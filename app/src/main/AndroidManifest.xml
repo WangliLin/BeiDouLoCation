@@ -28,11 +28,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="d653vKTeXwCqfS9W6XO29KE5gxsfYW6d" />
+            android:value="SAhSsIsL5HYsVfRXpvsGsoeMyPiwWlNg" />
     </application>
 
 </manifest>

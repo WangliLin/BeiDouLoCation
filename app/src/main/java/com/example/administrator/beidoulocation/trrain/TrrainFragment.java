@@ -42,11 +42,11 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
 
     @Override
     public void initView(View view) {
-        mMapView = (MapView) view.findViewById(R.id.bmapView);
+        mMapView = (MapView) view.findViewById(R.id.bmapView1);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
 //        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-
+//
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.COMPASS, true, null));
     }
@@ -54,17 +54,17 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
     @Override
     public void initListener() {
         // 初始化搜索模块，注册事件监听
-        mSearch = GeoCoder.newInstance();
-        mSearch.setOnGetGeoCodeResultListener(this);
-        showLocationOnMap(null);
+//        mSearch = GeoCoder.newInstance();
+//        mSearch.setOnGetGeoCodeResultListener(this);
+//        showLocationOnMap(null);
     }
 
     @Override
     public void initData() {
-        // 开启定位图层
+//         开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
         // 定位初始化
-        mLocClient = new LocationClient(context);
+        mLocClient = new LocationClient(getActivity());
         mLocClient.registerLocationListener(new MyLocationListenner(mMapView,mBaiduMap));
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开gps

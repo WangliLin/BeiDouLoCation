@@ -63,13 +63,13 @@ public class MainActivity extends AppCompatActivity {
                         currentFragment = homeFragment;
                         break;
                     case R.id.rb_trrain:
-                        if (trrainFragment == null) {
+//                        if (trrainFragment == null) {
                             trrainFragment = new TrrainFragment();
-                        }
+//                        }
                         currentFragment = trrainFragment;
                         break;
                     case R.id.rb_map:
-                        if (offlineMapFragment != null) {
+                        if (offlineMapFragment == null) {
                             offlineMapFragment = new OfflineMapFragment();
                         }
                         currentFragment = offlineMapFragment;
