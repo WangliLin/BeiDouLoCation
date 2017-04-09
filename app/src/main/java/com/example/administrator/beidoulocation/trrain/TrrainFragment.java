@@ -72,6 +72,8 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         option.setScanSpan(1000);
         mLocClient.setLocOption(option);
         mLocClient.start();
+
+
     }
 
     @Override
@@ -79,18 +81,21 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
+        mLocClient.stop();
     }
     @Override
     public void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
+        mLocClient.start();
     }
     @Override
     public void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
+        mLocClient.stop();
     }
 
     @Override
