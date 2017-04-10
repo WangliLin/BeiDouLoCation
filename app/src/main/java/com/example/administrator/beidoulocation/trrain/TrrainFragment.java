@@ -2,22 +2,16 @@ package com.example.administrator.beidoulocation.trrain;
 
 
 import android.view.View;
-import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.example.administrator.beidoulocation.R;
 import com.example.administrator.beidoulocation.listener.MyLocationListenner;
@@ -46,7 +40,7 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
 //        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
-//
+
         mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
                 MyLocationConfiguration.LocationMode.COMPASS, true, null));
     }
@@ -72,6 +66,15 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         option.setScanSpan(1000);
         mLocClient.setLocOption(option);
         mLocClient.start();
+        showLocationOnMap();
+        // 设置中心点  // 纬经度//120.093018,30.311045//浙江大学
+//        MapStatusUpdate centerMapStateusUpdate = MapStatusUpdateFactory.newLatLng(new LatLng(120.093018,30.311045));
+//        mBaiduMap.setMapStatus(centerMapStateusUpdate);
+
+
+        //设置缩放级别
+//        MapStatusUpdate zoomMapStateusUpdate = MapStatusUpdateFactory.zoomTo(19);
+//        mBaiduMap.setMapStatus(zoomMapStateusUpdate);
 
 
     }
@@ -100,45 +103,18 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
 
     @Override
     public void onGetGeoCodeResult(GeoCodeResult result) {
-        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(context, "抱歉，未能找到结果", Toast.LENGTH_LONG)
-                    .show();
-            return;
-        }
-        mBaiduMap.clear();
-        mBaiduMap.addOverlay(new MarkerOptions().position(result.getLocation())
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.icon_gcoding)));
-        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result
-                .getLocation()));
-        String strInfo = String.format("纬度：%f 经度：%f",
-                result.getLocation().latitude, result.getLocation().longitude);
-        Toast.makeText(context, strInfo, Toast.LENGTH_LONG).show();
+        mPresenter.onGetGeoCodeResult(result,mBaiduMap,context);
     }
 
     @Override
     public void onGetReverseGeoCodeResult(ReverseGeoCodeResult result) {
-        if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
-            Toast.makeText(context, "抱歉，未能找到结果", Toast.LENGTH_LONG)
-                    .show();
-            return;
-        }
-        mBaiduMap.clear();
-        mBaiduMap.addOverlay(new MarkerOptions().position(result.getLocation())
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.icon_gcoding)));
-        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(result
-                .getLocation()));
-        Toast.makeText(context, result.getAddress(),
-                Toast.LENGTH_LONG).show();
-
+        mPresenter.onGetReverseGeoCodeResult(result,mBaiduMap,context);
     }
 
-    public void  showLocationOnMap( LatLng ptCenter){
-        // 反Geo搜索
-        ptCenter = new LatLng(113.666521, 34.753978);
-        mSearch.reverseGeoCode(new ReverseGeoCodeOption()
-                .location(ptCenter));
+    public void showLocationOnMap(){
+        //120.093018,30.311045//浙江大学
+       LatLng ptCenter=new LatLng(120.093018d,30.311045d);
+        mPresenter.showLocationOnMap(ptCenter,null,null,mBaiduMap);
     }
 
 
