@@ -1,7 +1,5 @@
 package com.example.administrator.beidoulocation.home;
 
-import android.content.Context;
-
 import com.example.administrator.beidoulocation.mvp.BasePresenter;
 import com.example.administrator.beidoulocation.mvp.BaseView;
 
@@ -16,6 +14,6 @@ public class HomeContract {
     }
 
     interface  Presenter extends BasePresenter<View> {
-        
+
     }
 }

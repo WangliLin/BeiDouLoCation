@@ -3,6 +3,7 @@ package com.example.administrator.beidoulocation.home;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Sensor;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.administrator.beidoulocation.R;
 import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
+import com.example.administrator.beidoulocation.utils.DeviceListActivity;
 import com.example.administrator.beidoulocation.view.CompassView;
 
 import java.util.Locale;
@@ -169,6 +171,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
     @Override
     public void initView(View view) {
+        initLayout(view);
         mDirection = 0.0f;
         mTargetDirection = 0.0f;
         mInterpolator = new AccelerateInterpolator();
@@ -189,7 +192,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
         //mGuideAnimation = (AnimationDrawable) animationImage.getDrawable();
 
         mChinese = TextUtils.equals(Locale.getDefault().getLanguage(), "zh");
-        initLayout(view);
+
     }
 
     private void initServices() {
@@ -537,7 +540,6 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // TODO Auto-generated method stub
 
             // if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             // return;
@@ -548,7 +550,6 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // TODO Auto-generated method stub
 
         }
     };
@@ -557,8 +558,6 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // TODO Auto-generated method stub
-
             // if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             // return;
             // }
@@ -569,7 +568,6 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // TODO Auto-generated method stub
 
         }
     };
@@ -624,6 +622,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
     private LinearLayout ll_connect;
 
     private void initLayout(View view) {
+
         tv_box_id = (TextView) view.findViewById(R.id.tv_box_id);
         tv_box_state = (TextView) view.findViewById(R.id.tv_box_state);
         tv_longitude = (TextView) view.findViewById(R.id.tv_longitude);
@@ -634,7 +633,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
         tv_sunset = (TextView) view.findViewById(R.id.tv_sunset);
         ll_connect = (LinearLayout) view.findViewById(R.id.ll_connect);
 
-
+        //显示经纬度
         initServices();
     }
 
@@ -655,7 +654,17 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ll_connect:
+                Intent intentDevice = new Intent(context, DeviceListActivity.class);
+                startActivity(intentDevice);
                 break;
         }
     }
+
+
+
+/**
+ * ----------------------------  实时获取经纬度----------------------------------------
+ */
+
+
 }

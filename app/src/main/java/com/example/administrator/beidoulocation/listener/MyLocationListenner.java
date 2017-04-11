@@ -10,7 +10,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 
 /**
- * Created by 瑜哥 on 2017/4/7.
+ *
  */
 
 public class MyLocationListenner implements BDLocationListener {

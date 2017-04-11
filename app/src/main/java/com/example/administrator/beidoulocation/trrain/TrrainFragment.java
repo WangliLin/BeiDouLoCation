@@ -19,7 +19,7 @@ import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
 
 /**
  * MVPPlugin
- *  
+ *
  */
 
 public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainPresenter>

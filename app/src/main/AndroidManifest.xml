@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.administrator.beidoulocation">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -28,6 +31,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".utils.DeviceListActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="选取连接设备"
+            android:theme="@android:style/Theme.Dialog" >
+
+        </activity>
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
@@ -36,7 +47,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="SAhSsIsL5HYsVfRXpvsGsoeMyPiwWlNg" />
+            android:value="d653vKTeXwCqfS9W6XO29KE5gxsfYW6d" />
     </application>
 
 </manifest>

@@ -8,6 +8,7 @@ import com.example.administrator.beidoulocation.mvp.BasePresenterImpl;
  */
 
 public class HomePresenter extends BasePresenterImpl<HomeContract.View>
-        implements HomeContract.Presenter{
-    
+        implements HomeContract.Presenter {
+
+
 }
