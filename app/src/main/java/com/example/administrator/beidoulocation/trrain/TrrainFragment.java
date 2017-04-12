@@ -3,6 +3,7 @@ package com.example.administrator.beidoulocation.trrain;
 
 import android.view.View;
 
+import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
@@ -13,9 +14,12 @@ import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
+import com.example.administrator.beidoulocation.MainActivity;
 import com.example.administrator.beidoulocation.R;
 import com.example.administrator.beidoulocation.listener.MyLocationListenner;
 import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
+
+
 
 /**
  * MVPPlugin
@@ -59,7 +63,14 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         mBaiduMap.setMyLocationEnabled(true);
         // 定位初始化
         mLocClient = new LocationClient(getActivity());
-        mLocClient.registerLocationListener(new MyLocationListenner(mMapView,mBaiduMap));
+        MyLocationListenner bdLocationListener = new MyLocationListenner(mMapView, mBaiduMap);
+        bdLocationListener.setOnLocationListener(new MyLocationListenner.LocationData() {
+            @Override
+            public void getLocationData(BDLocation location) {
+                ((MainActivity)  context).onChangeData(location);
+            }
+        });
+        mLocClient.registerLocationListener(bdLocationListener);
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
@@ -83,22 +94,22 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
     public void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-        mMapView.onDestroy();
-        mLocClient.stop();
+//        mMapView.onDestroy();
+//        mLocClient.stop();
     }
     @Override
     public void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
-        mMapView.onResume();
-        mLocClient.start();
+//        mMapView.onResume();
+//        mLocClient.start();
     }
     @Override
     public void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
-        mMapView.onPause();
-        mLocClient.stop();
+//        mMapView.onPause();
+//        mLocClient.stop();
     }
 
     @Override
@@ -116,6 +127,7 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
        LatLng ptCenter=new LatLng(120.093018d,30.311045d);
         mPresenter.showLocationOnMap(ptCenter,null,null,mBaiduMap);
     }
+
 
 
 

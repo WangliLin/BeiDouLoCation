@@ -34,6 +34,9 @@ public class MyLocationListenner implements BDLocationListener {
                 // 此处设置开发者获取到的方向信息，顺时针0-360
                 .direction(100).latitude(location.getLatitude())
                 .longitude(location.getLongitude()).build();
+        if (locationData != null) {
+            locationData.getLocationData(location);
+        }
         mBaiduMap.setMyLocationData(locData);
         if (isFirstLoc) {
             isFirstLoc = false;
@@ -48,4 +51,14 @@ public class MyLocationListenner implements BDLocationListener {
     public void onReceivePoi(BDLocation poiLocation) {
 
     }
+
+    public interface  LocationData{
+         void getLocationData(BDLocation location);
+    }
+
+    public LocationData locationData;
+    public  void setOnLocationListener(LocationData locationData){
+        this.locationData = locationData;
+    }
+
 }

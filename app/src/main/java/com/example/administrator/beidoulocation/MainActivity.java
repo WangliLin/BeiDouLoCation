@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
-import com.baidu.mapapi.SDKInitializer;
+import com.baidu.location.BDLocation;
 import com.example.administrator.beidoulocation.home.HomeFragment;
 import com.example.administrator.beidoulocation.offlinemap.OfflineMapFragment;
 import com.example.administrator.beidoulocation.trrain.TrrainFragment;
@@ -27,11 +27,14 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout rl_setting,rl_version;
     private CircleImageView civ_user_head;
     private Context context;
+    private OfflineMapFragment offlineMapFragment;
+    private TrrainFragment trrainFragment;
+    private HomeFragment homeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SDKInitializer.initialize(getApplicationContext());
+
         context = this;
         setContentView(R.layout.activity_main);
         initView();
@@ -42,16 +45,11 @@ public class MainActivity extends AppCompatActivity {
         initDrawerLayout();
         fra_layout = (LinearLayout) findViewById(R.id.fra_layout);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-
-        radioGroup.check(R.id.rb_home);
+        trrainFragment = new TrrainFragment();
+        radioGroup.check(R.id.rb_trrain);
         getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
-                new HomeFragment()).commit();
+                trrainFragment).commit();
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            private OfflineMapFragment offlineMapFragment;
-            private TrrainFragment trrainFragment;
-            private HomeFragment homeFragment;
-
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 Fragment currentFragment = null;
@@ -80,6 +78,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                radioGroup.check(R.id.rb_home);
+//            }
+//        }, 1000);
+
+
     }
 
     private void initToobar() {
@@ -101,5 +108,19 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
+    }
+
+    public   DataChangeListener changeListener;
+    public interface DataChangeListener{
+        void onDataChange(BDLocation locations);
+    }
+    public void setonDataChangeListener(DataChangeListener changeListener){
+        this.changeListener = changeListener;
+    }
+
+    public void onChangeData(BDLocation location){
+        if (changeListener != null) {
+            changeListener.onDataChange(location);
+        }
     }
 }

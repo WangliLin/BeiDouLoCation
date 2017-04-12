@@ -34,6 +34,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.example.administrator.beidoulocation.MainActivity;
 import com.example.administrator.beidoulocation.R;
 import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
 import com.example.administrator.beidoulocation.utils.DeviceListActivity;
@@ -46,12 +48,13 @@ import java.util.UUID;
 
 /**
  * MVPPlugin
- * 修改注释
+ *  修改注释
+ *  
  */
 
-public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
-        implements HomeContract.View, View.OnClickListener {
-    //测试IAE   A
+public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
+        implements HomeContract.View, View.OnClickListener,MainActivity.DataChangeListener {
+//测试IAE   A
     private static final int MATRIX_SIZE = 9;
     private final float MAX_ROATE_DEGREE = 1.0f;
     private SensorManager mSensorManager;
@@ -199,7 +202,8 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         //mGuideAnimation = (AnimationDrawable) animationImage.getDrawable();
 
         mChinese = TextUtils.equals(Locale.getDefault().getLanguage(), "zh");
-
+        initLayout(view);
+        ((MainActivity)context).setonDataChangeListener(this);
     }
 
     private void initServices() {
@@ -230,7 +234,9 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
         super.onResume();
         if (mLocationProvider != null) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -547,6 +553,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
         @Override
         public void onSensorChanged(SensorEvent event) {
+            // TODO Auto-generated method stub
 
             // if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             // return;
@@ -557,6 +564,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // TODO Auto-generated method stub
 
         }
     };
@@ -565,6 +573,8 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
         @Override
         public void onSensorChanged(SensorEvent event) {
+            // TODO Auto-generated method stub
+
             // if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
             // return;
             // }
@@ -575,6 +585,7 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // TODO Auto-generated method stub
 
         }
     };
@@ -624,15 +635,15 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
      * ------------------------------------  拿到数据做展示的部分  经纬度，连接盒子的状态----------------------
      */
 //       UUID  0000ffe1-0000-1000-8000-00805f9b34f
-    private TextView tv_box_id, tv_box_state, tv_longitude, tv_latitude;
-    private TextView tv_signal, tv_electricity, tv_sunrise, tv_sunset;
+    private TextView tv_box_id,tv_box_state,tv_longitude,tv_latitude;
+    private TextView tv_signal,tv_electricity,tv_sunrise,tv_sunset;
     private LinearLayout ll_connect;
 
     private void initLayout(View view) {
-
         tv_box_id = (TextView) view.findViewById(R.id.tv_box_id);
         tv_box_state = (TextView) view.findViewById(R.id.tv_box_state);
         tv_longitude = (TextView) view.findViewById(R.id.tv_longitude);
+        tv_longitude.setText("586");
         tv_latitude = (TextView) view.findViewById(R.id.tv_latitude);
         tv_signal = (TextView) view.findViewById(R.id.tv_signal);
         tv_electricity = (TextView) view.findViewById(R.id.tv_electricity);
@@ -659,11 +670,24 @@ public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresent
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch (v.getId()){
             case R.id.ll_connect:
                 Intent intentDevice = new Intent(context, DeviceListActivity.class);
                 startActivityForResult(intentDevice, REQUEST_CONNECT_DEVICE);
                 break;
+        }
+    }
+
+
+    @Override
+    public void onDataChange(BDLocation locations) {
+//        Toast.makeText(context,locations.getLongitude()+"", Toast.LENGTH_SHORT).show();
+        tv_longitude.setText(locations.getLongitude()+"");
+        tv_latitude.setText(locations.getLatitude()+"");
+        if (tv_sunrise.getText().toString().equals("未知")) {
+            String[] split = mPresenter.getSunraiseSunsetTime(locations.getLatitude(), locations.getLongitude()).split(",");
+            tv_sunrise.setText(split[0]);
+            tv_sunset.setText(split[1]);
         }
     }
 

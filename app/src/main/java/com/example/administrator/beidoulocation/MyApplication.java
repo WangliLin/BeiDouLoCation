@@ -2,6 +2,8 @@ package com.example.administrator.beidoulocation;
 
 import android.app.Application;
 
+import com.baidu.mapapi.SDKInitializer;
+
 /**
  * Created by Administrator on 2017/4/8 0008.
  */
@@ -12,6 +14,7 @@ public class MyApplication extends Application implements Thread.UncaughtExcepti
         super.onCreate();
         //设置Thread Exception Handler
         Thread.setDefaultUncaughtExceptionHandler(this);
+        SDKInitializer.initialize(getApplicationContext());
     }
 
     @Override

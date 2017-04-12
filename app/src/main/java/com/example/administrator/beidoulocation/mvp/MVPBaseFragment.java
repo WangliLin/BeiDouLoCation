@@ -35,7 +35,7 @@ public abstract class MVPBaseFragment<V extends BaseView,T extends BasePresenter
 
     @Override
     public Context getContext() {
-        return super.getContext();
+        return context;
     }
 
     public  <T> T getInstance(Object o, int i) {
