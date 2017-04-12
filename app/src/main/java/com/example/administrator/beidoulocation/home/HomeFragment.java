@@ -687,7 +687,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
         if (tv_sunrise.getText().toString().equals("未知")) {
             String[] split = mPresenter.getSunraiseSunsetTime(locations.getLatitude(), locations.getLongitude()).split(",");
             tv_sunrise.setText(split[0]);
-            tv_sunset.setText(split[1]);
+            tv_sunset.setText(split[1]);//添加一个注释
             tv_signal.setText(locations.getAltitude()+"");
         }
     }
