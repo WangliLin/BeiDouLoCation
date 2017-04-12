@@ -2,6 +2,10 @@ package com.example.administrator.beidoulocation.home;
 
 
 import android.Manifest;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +21,7 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
@@ -34,17 +39,19 @@ import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
 import com.example.administrator.beidoulocation.utils.DeviceListActivity;
 import com.example.administrator.beidoulocation.view.CompassView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * MVPPlugin
- *  修改注释
- *  
+ * 修改注释
  */
 
-public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
+public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
         implements HomeContract.View, View.OnClickListener {
-//测试IAE   A
+    //测试IAE   A
     private static final int MATRIX_SIZE = 9;
     private final float MAX_ROATE_DEGREE = 1.0f;
     private SensorManager mSensorManager;
@@ -617,8 +624,8 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
      * ------------------------------------  拿到数据做展示的部分  经纬度，连接盒子的状态----------------------
      */
 //       UUID  0000ffe1-0000-1000-8000-00805f9b34f
-    private TextView tv_box_id,tv_box_state,tv_longitude,tv_latitude;
-    private TextView tv_signal,tv_electricity,tv_sunrise,tv_sunset;
+    private TextView tv_box_id, tv_box_state, tv_longitude, tv_latitude;
+    private TextView tv_signal, tv_electricity, tv_sunrise, tv_sunset;
     private LinearLayout ll_connect;
 
     private void initLayout(View view) {
@@ -652,19 +659,315 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ll_connect:
                 Intent intentDevice = new Intent(context, DeviceListActivity.class);
-                startActivity(intentDevice);
+                startActivityForResult(intentDevice, REQUEST_CONNECT_DEVICE);
                 break;
         }
     }
 
 
+    /**
+     * ----------------------------  获取连接 ----------------------------------------
+     * 0000ffe1-0000-1000-8000-00805f9b34f
+     */
+// SPP服务UUID号
+    private final static String MY_UUID = "0000ffe1-0000-1000-8000-00805f9b34f";
+    // 获取本地蓝牙适配器，即蓝牙设备
+    private BluetoothAdapter _bluetooth = BluetoothAdapter.getDefaultAdapter();
+    BluetoothDevice _device = null; // 蓝牙设备
+    BluetoothSocket _socket = null; // 蓝牙通信socket
 
-/**
- * ----------------------------  实时获取经纬度----------------------------------------
- */
+    private InputStream is; // 输入流，用来接收蓝牙数据
+    private final static int REQUEST_CONNECT_DEVICE = 1;
+    boolean bRun = true;
+    boolean bThread = false;
 
+    byte[] readBuffer = new byte[1024];
+    int readPoint = 0, readDeal = 0;
+    private String smsg = ""; // 显示用数据缓存
+    private String fmsg = ""; // 保存用数据缓存
+    private int fmsglen = 0;//
+    boolean refresh = false;
+
+    // 接收活动结果，响应startActivityForResult()
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CONNECT_DEVICE: // 连接结果，由DeviceListActivity设置返回
+                // 响应返回结果
+                if (resultCode == Activity.RESULT_OK) { // 连接成功，由DeviceListActivity设置返回
+                    // MAC地址，由DeviceListActivity设置返回
+                    String address = data.getExtras().getString(
+                            DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                    Toast.makeText(context, address, Toast.LENGTH_LONG).show();
+                    // 得到蓝牙设备
+                    _device = _bluetooth.getRemoteDevice(address);
+
+                    // 用服务号得到socket
+                    try {
+                        _socket = _device.createRfcommSocketToServiceRecord(UUID
+                                .fromString(MY_UUID));
+
+                    } catch (IOException e) {
+                        Toast.makeText(getContext(), "连接失败！拿不到socket", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+
+                    try {
+                        _socket.connect();
+                        Toast.makeText(getContext(),
+                                "连接" + _device.getName() + "成功！",
+                                Toast.LENGTH_SHORT).show();
+
+                    } catch (IOException e) {
+                        try {
+                            Toast.makeText(getContext(), "连接失败！_socket连接不上",
+                                    Toast.LENGTH_SHORT).show();
+                            _socket.close();
+                            _socket = null;
+                        } catch (IOException ee) {
+                            Toast.makeText(getContext(), "连接失败！",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        return;
+                    }
+
+                    // 打开接收线程
+                    try {
+                        is = _socket.getInputStream(); // 得到蓝牙数据输入流
+                    } catch (IOException e) {
+                        Toast.makeText(getContext(), "接收数据失败！", Toast.LENGTH_SHORT)
+                                .show();
+                        return;
+                    }
+                    if (bThread == false) {
+                        ReadThread.start();
+                        bThread = true;
+                    } else {
+                        bRun = true;
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    // 接收数据线程
+    Thread ReadThread = new Thread() {
+        public void run() {
+            int num = 0;
+            byte[] buffer = new byte[2048];
+            byte[] buffer_new = new byte[2048];
+            int i = 0;
+            int n = 0;
+            bRun = true;
+            boolean recedata = false;// 有数据
+            String s0 = "", sone = "";
+
+            // 接收线程
+            while (true) {
+                try {
+                    if (is.available() > 0) {// 有数据
+                        num = is.read(buffer); // 读入数据
+                        s0 = new String(buffer, 0, num);
+                        sone += s0;
+
+                        fmsg += s0; // 保存收到数据
+                        fmsglen += num;
+                        if (fmsg.length() > 2048000) {
+                            fmsg = fmsg.substring(fmsg.length() - 2048000);
+                        }
+
+                        smsg += s0; // 显示用
+                        String ics;
+                        if (smsg.length() > 1256) {
+                            ics = smsg.substring(smsg.length() - 1256);
+                            smsg = ics;
+                        }
+                        recedata = true;
+                    } else {
+                        if (recedata) {
+                            // 发送显示消息，进行显示刷新
+                            if (refresh == false) {
+                                Message msg = handler.obtainMessage();
+                                msg.obj = sone;
+                                handler.sendMessage(msg);
+                                refresh = true;
+                                sone = "";
+                            } else {//
+
+                            }
+                            recedata = false;
+
+                        }
+
+                        try {
+                            sleep(10);
+                        } catch (InterruptedException e) {
+
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                } catch (IOException e) {
+
+                }
+            }
+        }
+    };
+
+
+    // 消息处理队列
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            String imsg = msg.obj.toString();// 当前消息信息
+            if (!TextUtils.isEmpty(imsg)) {
+
+            }
+
+            System.out.println("--------数据数据数据>>>>>>" + imsg);
+            String igga[] = imsg.split("\r\n");// 每条GGA
+            for (int i = 0; i < igga.length; i++) {
+                String ijwdu[] = igga[i].split(",");// 每个逗号
+
+                if (ijwdu[0] != null) {
+                    if (ijwdu[0].indexOf("GGA") != -1) {// 查到GGA
+                        if (ijwdu.length > 13) {
+                            if (ijwdu[6] != null) {
+                                if (ijwdu[6].equals("4")) {// 差分定位
+
+                                    //tv_jingdu.setText("高精度");
+
+                                } else {
+
+                                    //tv_jingdu.setText("普通精度");
+
+                                }
+                            }
+                            if (ijwdu[13] != null) {
+                                if (ijwdu[13].length() > 0) {
+                                    // staDiff.append(" ;延时:" + ijwdu[13]);
+                                }
+                            }
+                            if ((ijwdu[2].length() > 4)
+                                    && (ijwdu[4].length() > 4)) {
+                                double ij1 = 0, iw1 = 0;
+                                CeJuType ceJuValue = new CeJuType();
+
+                                ij1 = Double.valueOf(ijwdu[4]);// 经度
+                                iw1 = Double.valueOf(ijwdu[2]);// 维度
+
+                                {// 一点
+                                    // 经度
+                                    ceJuValue.jd1 = ((int) (ij1 / 100));
+                                    ij1 = (ij1 - ceJuValue.jd1 * 100) / 60;
+                                    ceJuValue.jd1 += ij1;
+                                    ceJuValue.jd1 = ((double) ((long) (ceJuValue.jd1 * 100000000)) / 100000000);
+
+                                    // 维度
+                                    ceJuValue.wd1 = ((int) (iw1 / 100));
+                                    iw1 = (iw1 - ceJuValue.wd1 * 100) / 60;
+                                    ceJuValue.wd1 += iw1;
+                                    ceJuValue.wd1 = (double) ((long) (ceJuValue.wd1 * 100000000)) / 100000000;
+
+
+//									tv_jingweidu.setText(ceJuValue.jd1 + ","
+//											+ ceJuValue.wd1);
+                                }
+
+                                if (ijwdu[7].length() > 0) {// 有效卫星数
+                                    // jingweidu.append(";星数" + ijwdu[7]);
+                                    //tv_weixingshu.setTag("星数" + ijwdu[7]);
+
+                                }
+                            }
+                        }
+                    } else if (ijwdu[0].indexOf("GSV") != -1) {// 卫星输出
+                        if (ijwdu.length > 19) {
+                            String iweixing = "";
+                            if (ijwdu[2].length() > 0) {// GSV 序 号
+                                if (ijwdu[2].equals("1")) {// 第一条
+
+                                    if (ijwdu[3].length() > 0) {// 可视卫星数
+                                        iweixing += "可视卫星数：" + ijwdu[3] + "\n";
+                                    }
+                                }
+                            }
+
+                            if (ijwdu[4].length() > 0) {// 4卫星号//5仰角//6方位角//7信噪比
+                                iweixing += "卫星号:" + ijwdu[4] + ";仰角"
+                                        + ijwdu[5] + ";方位" + ijwdu[6] + ";信噪比"
+                                        + ijwdu[7] + "\n";
+                            }
+                            if (ijwdu[8].length() > 0) {// 8卫星号//9仰角//10方位角//11信噪比
+                                iweixing += "卫星号:" + ijwdu[8] + ";仰角"
+                                        + ijwdu[9] + ";方位" + ijwdu[10] + ";信噪比"
+                                        + ijwdu[11] + "\n";
+                            }
+
+                            if (ijwdu[12].length() > 0) {// 12卫星号//13仰角//14方位角//15信噪比
+                                iweixing += "卫星号:" + ijwdu[12] + ";仰角"
+                                        + ijwdu[13] + ";方位" + ijwdu[14]
+                                        + ";信噪比" + ijwdu[15] + "\n";
+                            }
+
+                            if (ijwdu[16].length() > 0) {// 16卫星号//17仰角//18方位角//19信噪比
+                                iweixing += "卫星号:" + ijwdu[16] + ";仰角"
+                                        + ijwdu[17] + ";方位" + ijwdu[18]
+                                        + ";信噪比" + ijwdu[19] + "\n";
+                            }
+
+
+                        }
+                    } else if (ijwdu[0].indexOf("GPRS") != -1) {// 查到GPRS
+                        if (ijwdu.length >= 4) {
+                            if (ijwdu[1].length() > 0) {// GPRS联网状态
+                                int igprsInt = 0;
+                                try {
+                                    igprsInt = Integer.valueOf(ijwdu[1]);
+                                } catch (Exception e) {
+
+                                    e.printStackTrace();
+                                    // staGprs.setText("GPRS 转换错误");
+                                }
+
+                                if (igprsInt < 5) {
+                                    // staGprs.setText("未启动:" + igprsInt);
+                                } else if (igprsInt < 15) {//
+                                    // staGprs.setText("连网中:" + igprsInt);
+                                } else if (igprsInt < 16) {//
+                                    // staGprs.setText("获IP中:" + igprsInt);
+                                } else if (igprsInt < 18) {//
+                                    // staGprs.setText("连服务器中:" + igprsInt);
+                                } else if (igprsInt == 20) {// 成功
+                                    // staGprs.setText("成功:" + igprsInt);
+                                    // staGprs.setTextColor(Color.rgb(0, 255,
+                                    // 0));
+                                }
+                            }
+
+                            if (ijwdu[2].length() > 0) {// GPRS 信号
+                                // staGprs.append(" ;信号:" + ijwdu[2]);
+
+                            }
+                        }
+                    }
+                }
+            }
+            refresh = false;// 刷新界面结束
+        }
+    };
+
+    class CeJuType {
+        double jd1 = 0;// 经度
+        double wd1 = 0;
+    }
 
 }
