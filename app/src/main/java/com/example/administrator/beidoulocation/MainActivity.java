@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        initToobar();
+        initToobar();//添加数组
         initDrawerLayout();
         fra_layout = (LinearLayout) findViewById(R.id.fra_layout);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
