@@ -117,9 +117,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="8dp"
-                android:gravity="center"
                 android:text="离线地图"
-                android:textSize="16sp" />
+                android:drawablePadding="10dp"
+                android:paddingLeft="20dp"
+                android:textColor="#ffffff"
+                android:drawableLeft="@drawable/location_transparacy"
+                android:textSize="18sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -189,7 +189,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
         mCompassView = view.findViewById(R.id.view_compass);
         mPointer = (CompassView) view.findViewById(R.id.compass_pointer);
-        //mLocationTextView = (TextView) view.findViewById(R.id.textview_location);
+//        mLocationTextView = (TextView) view.findViewById(R.id.textview_location);
         mDirectionLayout = (LinearLayout) view.findViewById(R.id.layout_direction);
         mAngleLayout = (LinearLayout) view.findViewById(R.id.layout_angle);
 
@@ -471,7 +471,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
                 sb.append(getString(R.string.location_west, getLocationString(-1.0 * longitude)));
             }
 
-            mLocationTextView.setText(sb.toString());
+//            mLocationTextView.setText(sb.toString());
         }
     }
 
