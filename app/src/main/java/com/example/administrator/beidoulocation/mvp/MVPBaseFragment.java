@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baidu.mapapi.map.MyLocationConfiguration;
+
 import java.lang.reflect.ParameterizedType;
 
 /**
@@ -18,12 +20,17 @@ import java.lang.reflect.ParameterizedType;
 public abstract class MVPBaseFragment<V extends BaseView,T extends BasePresenterImpl<V>> extends Fragment implements BaseView{
     public T mPresenter;
     public Context context;
+    public  MyLocationConfiguration myLocationConfiguration;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter= getInstance(this,1);
         mPresenter.attachView((V) this);
         context = getActivity();
+        myLocationConfiguration = new MyLocationConfiguration(
+                MyLocationConfiguration.LocationMode.COMPASS, true, null);
     }
 
     @Override

@@ -12,9 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.example.administrator.beidoulocation.home.HomeFragment;
+import com.example.administrator.beidoulocation.listener.MyClickListener;
 import com.example.administrator.beidoulocation.offlinemap.OfflineMapFragment;
 import com.example.administrator.beidoulocation.trrain.TrrainFragment;
 import com.example.administrator.beidoulocation.view.CircleImageView;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private OfflineMapFragment offlineMapFragment;
     private TrrainFragment trrainFragment;
     private HomeFragment homeFragment;
+    private TextView tv_downmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +102,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDrawerLayout() {
+        MyClickListener listener = new MyClickListener();
         rl_setting = (RelativeLayout) findViewById(R.id.rl_setting);
         rl_version = (RelativeLayout) findViewById(R.id.rl_version);
         civ_user_head = (CircleImageView) findViewById(R.id.civ_user_head);
+        tv_downmap = (TextView) findViewById(R.id.tv_ofl_map);
+        rl_setting.setOnClickListener(listener);
+        rl_version.setOnClickListener(listener);
+        civ_user_head.setOnClickListener(listener);
+        tv_downmap.setOnClickListener(listener);
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout
                 , toolbar, R.string.open_draw, R.string.close_draw);
