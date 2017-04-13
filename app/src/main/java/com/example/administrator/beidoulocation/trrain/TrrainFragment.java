@@ -15,6 +15,7 @@ import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.example.administrator.beidoulocation.MainActivity;
 import com.example.administrator.beidoulocation.R;
+import com.example.administrator.beidoulocation.enum_obj.MapType;
 import com.example.administrator.beidoulocation.listener.MyLocationListenner;
 import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
 
@@ -61,6 +62,16 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         mBaiduMap.setMyLocationEnabled(true);
         // 定位初始化
         mLocClient = new LocationClient(getActivity());
+        ((MainActivity)  context).setOnMapTypeChangeListener(new MainActivity.MapTypeListener() {
+            @Override
+            public void onMapTypeChangeListener(int type) {
+                if (type == MapType.OFFLINE_MAP.mapCode) {
+                    mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+                } else {
+                    mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+                }
+            }
+        });
         MyLocationListenner bdLocationListener = new MyLocationListenner(mMapView, mBaiduMap);
         bdLocationListener.setOnLocationListener(new MyLocationListenner.LocationData() {
             @Override

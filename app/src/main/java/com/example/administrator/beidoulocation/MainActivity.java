@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.example.administrator.beidoulocation.enum_obj.MapType;
 import com.example.administrator.beidoulocation.home.HomeFragment;
 import com.example.administrator.beidoulocation.listener.MyClickListener;
 import com.example.administrator.beidoulocation.offlinemap.OfflineMapFragment;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private TrrainFragment trrainFragment;
     private HomeFragment homeFragment;
     private TextView tv_downmap;
+    boolean isMap = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         fra_layout = (LinearLayout) findViewById(R.id.fra_layout);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         trrainFragment = new TrrainFragment();
+        homeFragment = new HomeFragment();
         radioGroup.check(R.id.rb_trrain);
         getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
                 trrainFragment).commit();
@@ -57,38 +60,20 @@ public class MainActivity extends AppCompatActivity {
                 Fragment currentFragment = null;
                 switch (checkedId){
                     case R.id.rb_home:
-                        if (homeFragment == null) {
-                             homeFragment = new HomeFragment();
-                        }
-                        currentFragment = homeFragment;
+                        switchFragment(false);
+                        isMap = false;
                         break;
                     case R.id.rb_trrain:
-                        if (trrainFragment == null) {
-                            trrainFragment = new TrrainFragment();
-                        }
-                        currentFragment = trrainFragment;
+                        neededToMap(MapType.TERRAIN_MAP.mapCode);
+                        isMap = true;
                         break;
                     case R.id.rb_map:
-                        if (offlineMapFragment == null) {
-                            offlineMapFragment = new OfflineMapFragment();
-                        }
-                        currentFragment = offlineMapFragment;
+                        neededToMap(MapType.OFFLINE_MAP.mapCode);
+                        isMap = true;
                         break;
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
-                        currentFragment).commit();
-
             }
         });
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                radioGroup.check(R.id.rb_home);
-//            }
-//        }, 1000);
-
-
     }
 
     private void initToobar() {
@@ -130,5 +115,39 @@ public class MainActivity extends AppCompatActivity {
         if (changeListener != null) {
             changeListener.onDataChange(location);
         }
+    }
+
+    public void  switchFragment(boolean isMap){
+        if (isMap) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
+                   trrainFragment).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
+                    homeFragment).commit();
+        }
+    }
+
+    public void  neededToMap(int maptype){
+        if (!isMap) {//从地图界面跳转
+            switchFragment(true);
+        } else {//不是地图界面跳转
+            if (maptype == MapType.OFFLINE_MAP.mapCode) {//离线地图
+                if (mapTypeListener != null) {
+                    mapTypeListener.onMapTypeChangeListener(MapType.OFFLINE_MAP.mapCode);
+                }
+            } else {//地形图
+                if (mapTypeListener != null) {
+                    mapTypeListener.onMapTypeChangeListener(MapType.TERRAIN_MAP.mapCode);
+                }
+            }
+        }
+    }
+
+    public MapTypeListener mapTypeListener;
+    public interface MapTypeListener{
+        void onMapTypeChangeListener(int type);
+    }
+    public void setOnMapTypeChangeListener(MapTypeListener mapTypeListener) {
+        this.mapTypeListener = mapTypeListener;
     }
 }
