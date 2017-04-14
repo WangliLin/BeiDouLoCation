@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -34,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private TrrainFragment trrainFragment;
     private HomeFragment homeFragment;
     private TextView tv_downmap;
-    boolean isMap = true;
+    private final int HOME_FRAGMENT=0,TERRAIN_FRAGMENT=1, OFFLINE_FRAGMENT = 2;
+    private int last_fragment = HOME_FRAGMENT;
+    private FragmentManager supportFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,25 +54,31 @@ public class MainActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         trrainFragment = new TrrainFragment();
         homeFragment = new HomeFragment();
-        radioGroup.check(R.id.rb_trrain);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
-                trrainFragment).commit();
+        radioGroup.check(R.id.rb_home);
+
+        supportFragmentManager = getSupportFragmentManager();
+        supportFragmentManager.beginTransaction()
+                                .add(R.id.fra_layout,trrainFragment)
+                                .add(R.id.fra_layout,homeFragment)
+                                .show(homeFragment)
+                                .hide(trrainFragment)
+                                .commit();
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 Fragment currentFragment = null;
                 switch (checkedId){
                     case R.id.rb_home:
-                        switchFragment(false);
-                        isMap = false;
+                        supportFragmentManager.beginTransaction().show(homeFragment).hide(trrainFragment).commit();
+                        last_fragment = HOME_FRAGMENT;
                         break;
                     case R.id.rb_trrain:
-                        neededToMap(MapType.TERRAIN_MAP.mapCode);
-                        isMap = true;
+                        switchFragment(TERRAIN_FRAGMENT);
+                        last_fragment = TERRAIN_FRAGMENT;
                         break;
                     case R.id.rb_map:
-                        neededToMap(MapType.OFFLINE_MAP.mapCode);
-                        isMap = true;
+                        switchFragment(OFFLINE_FRAGMENT);
+                        last_fragment = OFFLINE_FRAGMENT;
                         break;
                 }
             }
@@ -117,31 +126,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void  switchFragment(boolean isMap){
-        if (isMap) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
-                   trrainFragment).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fra_layout,
-                    homeFragment).commit();
+    public void  switchFragment(int targetFargment){
+
+        switch (targetFargment){
+            case TERRAIN_FRAGMENT:
+                switchMap(targetFargment);
+                break;
+            case OFFLINE_FRAGMENT:
+                switchMap(targetFargment);
+                break;
         }
     }
 
-    public void  neededToMap(int maptype){
-        if (!isMap) {//从地图界面跳转
-            switchFragment(true);
-        } else {//不是地图界面跳转
-            if (maptype == MapType.OFFLINE_MAP.mapCode) {//离线地图
-                if (mapTypeListener != null) {
-                    mapTypeListener.onMapTypeChangeListener(MapType.OFFLINE_MAP.mapCode);
-                }
-            } else {//地形图
-                if (mapTypeListener != null) {
-                    mapTypeListener.onMapTypeChangeListener(MapType.TERRAIN_MAP.mapCode);
-                }
+    private void switchMap(int targetFargment) {
+        if (last_fragment == HOME_FRAGMENT) {
+            supportFragmentManager.beginTransaction().show(trrainFragment).hide(homeFragment).commit();
+            switchLayer(targetFargment);
+        }else{
+            switchLayer(targetFargment);
+        }
+    }
+
+    private void switchLayer(int targetFargment) {
+        if (targetFargment == TERRAIN_FRAGMENT) {
+            if (mapTypeListener != null) {
+                mapTypeListener.onMapTypeChangeListener(MapType.TERRAIN_MAP.mapCode);
+            }
+        } else {
+            if (mapTypeListener != null) {
+                mapTypeListener.onMapTypeChangeListener(MapType.OFFLINE_MAP.mapCode);
             }
         }
     }
+
 
     public MapTypeListener mapTypeListener;
     public interface MapTypeListener{
