@@ -193,7 +193,7 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
         mDirectionLayout = (LinearLayout) view.findViewById(R.id.layout_direction);
         mAngleLayout = (LinearLayout) view.findViewById(R.id.layout_angle);
 
-        mPointer.setImageResource(R.drawable.compass);
+//        mPointer.setImageResource(R.drawable.compass);
 
 //        mViewGuide = view.findViewById(R.id.view_guide);
 
@@ -643,7 +643,6 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
         tv_box_id = (TextView) view.findViewById(R.id.tv_box_id);
         tv_box_state = (TextView) view.findViewById(R.id.tv_box_state);
         tv_longitude = (TextView) view.findViewById(R.id.tv_longitude);
-        tv_longitude.setText("586");
         tv_latitude = (TextView) view.findViewById(R.id.tv_latitude);
         tv_signal = (TextView) view.findViewById(R.id.tv_signal);
         tv_electricity = (TextView) view.findViewById(R.id.tv_electricity);
@@ -851,12 +850,10 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-
             String imsg = msg.obj.toString();// 当前消息信息
             if (!TextUtils.isEmpty(imsg)) {
 
             }
-
             System.out.println("--------数据数据数据>>>>>>" + imsg);
             String igga[] = imsg.split("\r\n");// 每条GGA
             for (int i = 0; i < igga.length; i++) {

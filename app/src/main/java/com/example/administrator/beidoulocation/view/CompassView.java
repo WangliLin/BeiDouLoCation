@@ -20,13 +20,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 /**
  * net.micode.compass.CompassView
  * @author Administrator
  * com.example.administrator.beidoulocation.view.CompassView
  */
-public class CompassView extends ImageView {
+public class CompassView extends android.support.v7.widget.AppCompatImageView {
     private float mDirection;
     private Drawable compass;
 
@@ -56,7 +55,8 @@ public class CompassView extends ImageView {
         }
 
         canvas.save();
-        canvas.rotate(mDirection, getWidth() / 2, getHeight() / 2);
+        compass.setBounds(0, 0, getWidth(), getHeight());
+        canvas.rotate(mDirection, getWidth() /2f, getHeight() /2f);
         compass.draw(canvas);
         canvas.restore();
     }
