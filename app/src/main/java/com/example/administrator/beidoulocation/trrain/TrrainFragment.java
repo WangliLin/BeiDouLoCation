@@ -7,11 +7,14 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.search.geocode.GeoCodeResult;
 import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
+import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.example.administrator.beidoulocation.MainActivity;
 import com.example.administrator.beidoulocation.R;
@@ -42,18 +45,15 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
     public void initView(View view) {
         mMapView = (MapView) view.findViewById(R.id.bmapView1);
         mBaiduMap = mMapView.getMap();
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
-//        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);//BaiduMap.MAP_TYPE_NORMAL
         mBaiduMap.setMyLocationConfigeration(myLocationConfiguration);
-
     }
 
     @Override
     public void initListener() {
         // 初始化搜索模块，注册事件监听
-//        mSearch = GeoCoder.newInstance();
-//        mSearch.setOnGetGeoCodeResultListener(this);
-//        showLocationOnMap(null);
+        mSearch = GeoCoder.newInstance();
+        mSearch.setOnGetGeoCodeResultListener(this);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         MyLocationListenner bdLocationListener = new MyLocationListenner(mMapView, mBaiduMap);
         bdLocationListener.setOnLocationListener(new MyLocationListenner.LocationData() {
             @Override
-            public void getLocationData(BDLocation location) {
+            public void getLocationData(final BDLocation location) {
                 ((MainActivity)  context).onChangeData(location);
             }
         });
@@ -83,19 +83,22 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true); // 打开gps
         option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setScanSpan(1000);
+        option.setScanSpan(1);//定位次数
         mLocClient.setLocOption(option);
-        mLocClient.start();
-        showLocationOnMap();
-        // 设置中心点  // 纬经度//120.093018,30.311045//浙江大学
+//         设置中心点  // 纬经度//120.093018,30.311045//浙江大学
 //        MapStatusUpdate centerMapStateusUpdate = MapStatusUpdateFactory.newLatLng(new LatLng(120.093018,30.311045));
 //        mBaiduMap.setMapStatus(centerMapStateusUpdate);
-
-
-        //设置缩放级别
-//        MapStatusUpdate zoomMapStateusUpdate = MapStatusUpdateFactory.zoomTo(19);
-//        mBaiduMap.setMapStatus(zoomMapStateusUpdate);
-
+//        设置缩放级别
+        MapStatusUpdate zoomMapStateusUpdate = MapStatusUpdateFactory.zoomTo(15);
+        mBaiduMap.setMapStatus(zoomMapStateusUpdate);
+        mLocClient.start();
+        //实现MainActivity地图显示的接口
+        ((MainActivity)  context).useLatLngOnMap(new MainActivity.ShowLocationFunction() {
+            @Override
+            public void showLatLngOnMap(LatLng latLng) {
+                showLocationOnMap(latLng);
+            }
+        });
 
     }
 
@@ -131,13 +134,14 @@ public class TrrainFragment extends MVPBaseFragment<TrrainContract.View, TrrainP
         mPresenter.onGetReverseGeoCodeResult(result,mBaiduMap,context);
     }
 
-    public void showLocationOnMap(){
+    public void showLocationOnMap(LatLng latLng){
         //120.093018,30.311045//浙江大学
-       LatLng ptCenter=new LatLng(120.093018d,30.311045d);
-        mPresenter.showLocationOnMap(ptCenter,null,null,mBaiduMap);
+//       LatLng latLng=new LatLng(30.311045d,120.093018d);
+        mSearch.reverseGeoCode(new ReverseGeoCodeOption()
+                .location(latLng));
+        BDLocation bdLocation = new BDLocation();
+        bdLocation.setLatitude(latLng.latitude);
+        bdLocation.setLongitude(latLng.longitude);
+        ((MainActivity)  context).onChangeData(bdLocation);
     }
-
-
-
-
 }

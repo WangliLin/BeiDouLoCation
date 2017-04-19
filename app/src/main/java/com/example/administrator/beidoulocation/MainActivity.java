@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
 import com.example.administrator.beidoulocation.enum_obj.MapType;
 import com.example.administrator.beidoulocation.home.HomeFragment;
 import com.example.administrator.beidoulocation.listener.MyClickListener;
@@ -54,6 +55,14 @@ public class MainActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         trrainFragment = new TrrainFragment();
         homeFragment = new HomeFragment();
+        homeFragment.setMyLocationOnMap(new HomeFragment.ShowMyLocation() {
+            @Override
+            public void requestShowLocation(LatLng latLng) {
+                if (locationFunction!=null) {
+                    locationFunction.showLatLngOnMap(latLng);
+                }
+            }
+        });
         radioGroup.check(R.id.rb_home);
 
         supportFragmentManager = getSupportFragmentManager();
@@ -160,11 +169,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public MapTypeListener mapTypeListener;
+    public MapTypeListener mapTypeListener;//改变地图图层的接口
     public interface MapTypeListener{
         void onMapTypeChangeListener(int type);
     }
     public void setOnMapTypeChangeListener(MapTypeListener mapTypeListener) {
         this.mapTypeListener = mapTypeListener;
+    }
+
+    ShowLocationFunction locationFunction;//展示经纬度在地图上的 -- 接口
+    public void useLatLngOnMap(ShowLocationFunction locationFunction) {
+        this.locationFunction = locationFunction;
+    }
+    public  interface ShowLocationFunction{
+        void showLatLngOnMap(LatLng latLng);
     }
 }

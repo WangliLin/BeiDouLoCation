@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
 import com.example.administrator.beidoulocation.MainActivity;
 import com.example.administrator.beidoulocation.R;
 import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
@@ -52,7 +53,7 @@ import java.util.UUID;
  *  
  */
 
-public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
+public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
         implements HomeContract.View, View.OnClickListener,MainActivity.DataChangeListener {
 //测试IAE   A
     private static final int MATRIX_SIZE = 9;
@@ -664,7 +665,13 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
 
     @Override
     public void initData() {
-
+//        new Handler().postDelayed(new Runnable() {   //测试显示浙大的经纬 在地图上
+//            @Override
+//            public void run() {
+//                LatLng latLng=new LatLng(30.311045d,120.093018d);
+//                showBeiDouLocation(latLng);
+//            }
+//        }, 15000);
     }
 
     @Override
@@ -687,7 +694,9 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
             String[] split = mPresenter.getSunraiseSunsetTime(locations.getLatitude(), locations.getLongitude()).split(",");
             tv_sunrise.setText(split[0]);
             tv_sunset.setText(split[1]);//添加一个注释
-            tv_signal.setText(locations.getAltitude()+"");
+            if (locations.getAltitude() != 0) {
+                 tv_signal.setText(locations.getAltitude()+"");
+            }
         }
     }
 
@@ -990,6 +999,28 @@ public  class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresen
     class CeJuType {
         double jd1 = 0;// 经度
         double wd1 = 0;
+    }
+
+
+    ShowMyLocation showMyLocation;
+    public void setMyLocationOnMap(ShowMyLocation showMyLocation) {
+        this.showMyLocation = showMyLocation;
+    }
+
+    //显示位置的接口
+    public interface ShowMyLocation{
+    public abstract void requestShowLocation(LatLng latLng);
+    }
+
+
+    /**
+     * 调用此方法显示 经纬度在地图上  LatLng latLng=new LatLng(30.311045d,120.093018d);
+     * @param latLng 经纬度对象  需要百度的经纬度,记得转换
+     */
+    private void  showBeiDouLocation(LatLng latLng){
+        if (showMyLocation != null && latLng != null) {
+            showMyLocation.requestShowLocation(latLng);
+        }
     }
 
 }
