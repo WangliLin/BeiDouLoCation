@@ -7,14 +7,14 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
@@ -32,24 +32,39 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".utils.DeviceListActivity"
+        <activity
+            android:name=".utils.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="选取连接设备"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@android:style/Theme.Dialog">
 
         </activity>
 
-        <activity android:name=".offlinemap.DownloadOfflineMap"/>
+        <activity android:name=".offlinemap.DownloadOfflineMap" />
+        <activity android:name=".context.DeviceControlActivity" />
+
+        <service
+            android:name=".context.BluetoothLeService"
+            android:enabled="true" />
+
+
+        <activity
+            android:name=".blue.DeviceScanActivity"
+            android:configChanges="orientation|keyboardHidden"
+
+             />
+        <activity android:name=".blue.DeviceControlActivity"
+
+            />
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote" >
-        </service>
+            android:process=":remote"></service>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="K7qK4nCb1mDzgbMuZ3onzUWn9H8i4qOe" />
+            android:value="d653vKTeXwCqfS9W6XO29KE5gxsfYW6d" />
     </application>
 
 </manifest>

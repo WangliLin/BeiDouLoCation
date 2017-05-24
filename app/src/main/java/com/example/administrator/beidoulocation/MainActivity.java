@@ -3,7 +3,6 @@ package com.example.administrator.beidoulocation;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -29,14 +28,14 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout fra_layout;
     private RadioGroup radioGroup;
     private Toolbar toolbar;
-    private RelativeLayout rl_setting,rl_version;
+    private RelativeLayout rl_setting, rl_version;
     private CircleImageView civ_user_head;
     private Context context;
     private OfflineMapFragment offlineMapFragment;
     private TrrainFragment trrainFragment;
     private HomeFragment homeFragment;
     private TextView tv_downmap;
-    private final int HOME_FRAGMENT=0,TERRAIN_FRAGMENT=1, OFFLINE_FRAGMENT = 2;
+    private final int HOME_FRAGMENT = 0, TERRAIN_FRAGMENT = 1, OFFLINE_FRAGMENT = 2;
     private int last_fragment = HOME_FRAGMENT;
     private FragmentManager supportFragmentManager;
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        initToobar();//添加数组
+        initToobar();
         initDrawerLayout();
         fra_layout = (LinearLayout) findViewById(R.id.fra_layout);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         homeFragment.setMyLocationOnMap(new HomeFragment.ShowMyLocation() {
             @Override
             public void requestShowLocation(LatLng latLng) {
-                if (locationFunction!=null) {
+                if (locationFunction != null) {
                     locationFunction.showLatLngOnMap(latLng);
                 }
             }
@@ -67,16 +66,15 @@ public class MainActivity extends AppCompatActivity {
 
         supportFragmentManager = getSupportFragmentManager();
         supportFragmentManager.beginTransaction()
-                                .add(R.id.fra_layout,trrainFragment)
-                                .add(R.id.fra_layout,homeFragment)
-                                .show(homeFragment)
-                                .hide(trrainFragment)
-                                .commit();
+                .add(R.id.fra_layout, trrainFragment)
+                .add(R.id.fra_layout, homeFragment)
+                .show(homeFragment)
+                .hide(trrainFragment)
+                .commit();
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Fragment currentFragment = null;
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rb_home:
                         supportFragmentManager.beginTransaction().show(homeFragment).hide(trrainFragment).commit();
                         last_fragment = HOME_FRAGMENT;
@@ -121,23 +119,25 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setScrimColor(Color.TRANSPARENT);
     }
 
-    public   DataChangeListener changeListener;
-    public interface DataChangeListener{
+    public DataChangeListener changeListener;
+
+    public interface DataChangeListener {
         void onDataChange(BDLocation locations);
     }
-    public void setonDataChangeListener(DataChangeListener changeListener){
+
+    public void setonDataChangeListener(DataChangeListener changeListener) {
         this.changeListener = changeListener;
     }
 
-    public void onChangeData(BDLocation location){
+    public void onChangeData(BDLocation location) {
         if (changeListener != null) {
             changeListener.onDataChange(location);
         }
     }
 
-    public void  switchFragment(int targetFargment){
+    public void switchFragment(int targetFargment) {
 
-        switch (targetFargment){
+        switch (targetFargment) {
             case TERRAIN_FRAGMENT:
                 switchMap(targetFargment);
                 break;
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         if (last_fragment == HOME_FRAGMENT) {
             supportFragmentManager.beginTransaction().show(trrainFragment).hide(homeFragment).commit();
             switchLayer(targetFargment);
-        }else{
+        } else {
             switchLayer(targetFargment);
         }
     }
@@ -170,18 +170,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     public MapTypeListener mapTypeListener;//改变地图图层的接口
-    public interface MapTypeListener{
+
+    public interface MapTypeListener {
         void onMapTypeChangeListener(int type);
     }
+
     public void setOnMapTypeChangeListener(MapTypeListener mapTypeListener) {
         this.mapTypeListener = mapTypeListener;
     }
 
     ShowLocationFunction locationFunction;//展示经纬度在地图上的 -- 接口
+
     public void useLatLngOnMap(ShowLocationFunction locationFunction) {
         this.locationFunction = locationFunction;
     }
-    public  interface ShowLocationFunction{
+
+    public interface ShowLocationFunction {
         void showLatLngOnMap(LatLng latLng);
     }
 }

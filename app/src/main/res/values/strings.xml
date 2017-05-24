@@ -12,4 +12,26 @@
     <string name="location_east">%s E</string>
     <string name="location_west">%s W</string>
     <string name="calibrate_success">Calibration complete</string>
+
+
+
+    <string name="ble_not_supported">手机不支持蓝牙</string>
+    <string name="label_data">Data:</string>
+    <string name="label_device_address">Device address:</string>
+    <string name="label_state">State:</string>
+    <string name="no_data">No data</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="title_devices">蓝牙设备搜索</string>
+    <string name="error_bluetooth_not_supported">蓝牙不支持</string>
+
+    <string name="unknown_device">Unknown device</string>
+    <string name="unknown_characteristic">Unknown characteristic</string>
+    <string name="unknown_service">Unknown service</string>
+
+    <!-- Menu items -->
+    <string name="menu_connect">连接</string>
+    <string name="menu_disconnect">断开</string>
+    <string name="menu_scan">扫描</string>
+    <string name="menu_stop">停止</string>
 </resources>

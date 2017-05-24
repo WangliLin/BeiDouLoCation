@@ -38,8 +38,8 @@ import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
 import com.example.administrator.beidoulocation.MainActivity;
 import com.example.administrator.beidoulocation.R;
+import com.example.administrator.beidoulocation.blue.DeviceScanActivity;
 import com.example.administrator.beidoulocation.mvp.MVPBaseFragment;
-import com.example.administrator.beidoulocation.utils.DeviceListActivity;
 import com.example.administrator.beidoulocation.view.CompassView;
 
 import java.io.IOException;
@@ -49,13 +49,12 @@ import java.util.UUID;
 
 /**
  * MVPPlugin
- *  修改注释
- *  
+ * 修改注释
  */
 
-public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
-        implements HomeContract.View, View.OnClickListener,MainActivity.DataChangeListener {
-//测试IAE   A
+public class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePresenter>
+        implements HomeContract.View, View.OnClickListener, MainActivity.DataChangeListener {
+    //测试IAE   A
     private static final int MATRIX_SIZE = 9;
     private final float MAX_ROATE_DEGREE = 1.0f;
     private SensorManager mSensorManager;
@@ -162,23 +161,10 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
         }
     };
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        context = getActivity();
-//        View view = View.inflate(getActivity(), R.layout.fragment_home,
-//                null);
-//        initView(view);
-//        initLayout(view);
-//        initServices();
-//        return view;
-//    }
-
     @Override
     public int getLayoutResId() {
         return R.layout.fragment_home;
     }
-
 
     @Override
     public void initView(View view) {
@@ -194,24 +180,14 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
         mDirectionLayout = (LinearLayout) view.findViewById(R.id.layout_direction);
         mAngleLayout = (LinearLayout) view.findViewById(R.id.layout_angle);
 
-//        mPointer.setImageResource(R.drawable.compass);
-
-//        mViewGuide = view.findViewById(R.id.view_guide);
-
-        //ImageView animationImage = (ImageView) view.findViewById(R.id.guide_animation);
-
-        //mGuideAnimation = (AnimationDrawable) animationImage.getDrawable();
-
         mChinese = TextUtils.equals(Locale.getDefault().getLanguage(), "zh");
         initLayout(view);
-        ((MainActivity)context).setonDataChangeListener(this);
+        ((MainActivity) context).setonDataChangeListener(this);
     }
 
     private void initServices() {
         // sensor manager
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        // mOrientationSensor =
-        // mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
 
         mAccelerometerSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mMagneticFieldSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -238,12 +214,7 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED) {
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+
                 return;
             }
             mLocationManager.getLastKnownLocation(mLocationProvider);
@@ -252,12 +223,6 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
         } else {
             //mLocationTextView.setText(R.string.cannot_get_location);
         }
-
-        // if (mOrientationSensor != null) {
-        // mSensorManager.registerListener(mOrientationSensorEventListener,
-        // mOrientationSensor,
-        // SensorManager.SENSOR_DELAY_GAME);
-        // }
 
         if (mAccelerometerSensor != null) {
             mSensorManager.registerListener(mAccelerometerSensorEventListener, mAccelerometerSensor,
@@ -278,9 +243,6 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
     public void onPause() {
         super.onPause();
         mStopDrawing = true;
-        // if (mOrientationSensor != null) {
-        // mSensorManager.unregisterListener(mOrientationSensorEventListener);
-        // }
 
         if (mAccelerometerSensor != null) {
             mSensorManager.unregisterListener(mAccelerometerSensorEventListener);
@@ -292,40 +254,12 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
 
         if (mLocationProvider != null) {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             mLocationManager.removeUpdates(mLocationListener);
         }
 
     }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        mStopDrawing = true;
-//        // if (mOrientationSensor != null) {
-//        // mSensorManager.unregisterListener(mOrientationSensorEventListener);
-//        // }
-//
-//        if (mAccelerometerSensor != null) {
-//            mSensorManager.unregisterListener(mAccelerometerSensorEventListener);
-//        }
-//
-//        if (mMagneticFieldSensor != null) {
-//            mSensorManager.unregisterListener(mMagnetFieldSensorEventListener);
-//        }
-//
-//        if (mLocationProvider != null) {
-//            mLocationManager.removeUpdates(mLocationListener);
-//        }
-//    }
 
     private void updateDirection() {
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(40, 40);
@@ -483,20 +417,6 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
         return String.valueOf(du) + "°" + String.valueOf(fen) + "'" + String.valueOf(miao) + "\"";
     }
 
-    // private SensorEventListener mOrientationSensorEventListener = new
-    // SensorEventListener() {
-    //
-    // @Override
-    // public void onSensorChanged(SensorEvent event) {
-    // float direction = event.values[0] * -1.0f;
-    // mTargetDirection = normalizeDegree(direction);
-    // }
-    //
-    // @Override
-    // public void onAccuracyChanged(Sensor sensor, int accuracy) {
-    // }
-    // };
-
     private void calculateTargetDirection() {
         synchronized (this) {
             double data = Math.sqrt(Math.pow(mMagneticFieldValues[0], 2) + Math.pow(mMagneticFieldValues[1], 2)
@@ -554,11 +474,6 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // TODO Auto-generated method stub
-
-            // if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
-            // return;
-            // }
 
             System.arraycopy(event.values, 0, mAccelerometerValues, 0, 3);
         }
@@ -574,11 +489,6 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            // TODO Auto-generated method stub
-
-            // if (event.accuracy == SensorManager.SENSOR_STATUS_UNRELIABLE) {
-            // return;
-            // }
 
             System.arraycopy(event.values, 0, mMagneticFieldValues, 0, 3);
             mMagneticFieldAccuracy = event.accuracy;
@@ -601,13 +511,7 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
         public void onStatusChanged(String provider, int status, Bundle extras) {
             if (status != LocationProvider.OUT_OF_SERVICE) {
                 if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
+
                     return;
                 }
                 updateLocation(mLocationManager.getLastKnownLocation(mLocationProvider));
@@ -636,8 +540,8 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
      * ------------------------------------  拿到数据做展示的部分  经纬度，连接盒子的状态----------------------
      */
 //       UUID  0000ffe1-0000-1000-8000-00805f9b34f
-    private TextView tv_box_id,tv_box_state,tv_longitude,tv_latitude;
-    private TextView tv_signal,tv_electricity,tv_sunrise,tv_sunset;
+    private TextView tv_box_id, tv_box_state, tv_longitude, tv_latitude;
+    private TextView tv_signal, tv_electricity, tv_sunrise, tv_sunset;
     private LinearLayout ll_connect;
 
     private void initLayout(View view) {
@@ -665,21 +569,24 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
 
     @Override
     public void initData() {
-//        new Handler().postDelayed(new Runnable() {   //测试显示浙大的经纬 在地图上
-//            @Override
-//            public void run() {
-//                LatLng latLng=new LatLng(30.311045d,120.093018d);
-//                showBeiDouLocation(latLng);
-//            }
-//        }, 15000);
+
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.ll_connect:
-                Intent intentDevice = new Intent(context, DeviceListActivity.class);
-                startActivityForResult(intentDevice, REQUEST_CONNECT_DEVICE);
+                tv_box_id.setText("");
+                if (!_bluetooth.isEnabled()) {
+                    //设备没有打开蓝牙 提示  打开
+                    Toast.makeText(context, "蓝牙设备没打开,请打开蓝牙再连接", Toast.LENGTH_LONG).show();
+                } else {
+//                    Intent intentDevice = new Intent(context, DeviceListActivity.class);
+//                    startActivityForResult(intentDevice, REQUEST_CONNECT_DEVICE);
+                    Intent intent = new Intent(context, DeviceScanActivity.class);
+                    startActivity(intent);
+                }
+
                 break;
         }
     }
@@ -688,14 +595,14 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
     @Override
     public void onDataChange(BDLocation locations) {
 //        Toast.makeText(context,locations.getLongitude()+"", Toast.LENGTH_SHORT).show();
-        tv_longitude.setText(locations.getLongitude()+"");
-        tv_latitude.setText(locations.getLatitude()+"");
+        tv_longitude.setText(locations.getLongitude() + "");
+        tv_latitude.setText(locations.getLatitude() + "");
         if (tv_sunrise.getText().toString().equals("未知")) {
             String[] split = mPresenter.getSunraiseSunsetTime(locations.getLatitude(), locations.getLongitude()).split(",");
             tv_sunrise.setText(split[0]);
             tv_sunset.setText(split[1]);//添加一个注释
             if (locations.getAltitude() != 0) {
-                 tv_signal.setText(locations.getAltitude()+"");
+                tv_signal.setText(locations.getAltitude() + "");
             }
         }
     }
@@ -706,7 +613,7 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
      * 0000ffe1-0000-1000-8000-00805f9b34f
      */
 // SPP服务UUID号
-    private final static String MY_UUID = "0000ffe1-0000-1000-8000-00805f9b34f";
+    private final static String MY_UUID = "0000ffe1-0000-1000-8000-00805f9b34fb";
     // 获取本地蓝牙适配器，即蓝牙设备
     private BluetoothAdapter _bluetooth = BluetoothAdapter.getDefaultAdapter();
     BluetoothDevice _device = null; // 蓝牙设备
@@ -732,7 +639,9 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
                 if (resultCode == Activity.RESULT_OK) { // 连接成功，由DeviceListActivity设置返回
                     // MAC地址，由DeviceListActivity设置返回
                     String address = data.getExtras().getString(
-                            DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                            "设备地址");
+                    tv_box_id.setText(address);
+                    Log.e("设备地址>>>>>>>>>>>", address);
                     Toast.makeText(context, address, Toast.LENGTH_LONG).show();
                     // 得到蓝牙设备
                     _device = _bluetooth.getRemoteDevice(address);
@@ -741,9 +650,9 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
                     try {
                         _socket = _device.createRfcommSocketToServiceRecord(UUID
                                 .fromString(MY_UUID));
-
+                        Log.e("设备socket>>>>>>>>>>>", _socket + "");
                     } catch (IOException e) {
-                        Toast.makeText(getContext(), "连接失败！拿不到socket", Toast.LENGTH_SHORT)
+                        Toast.makeText(getContext(), "连接失败！拿不到socket" + address, Toast.LENGTH_SHORT)
                                 .show();
                     }
 
@@ -755,7 +664,7 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
 
                     } catch (IOException e) {
                         try {
-                            Toast.makeText(getContext(), "连接失败！_socket连接不上",
+                            Toast.makeText(getContext(), "连接失败！_socket连接不上" + address,
                                     Toast.LENGTH_SHORT).show();
                             _socket.close();
                             _socket = null;
@@ -787,7 +696,6 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
                 break;
         }
     }
-
 
     // 接收数据线程
     Thread ReadThread = new Thread() {
@@ -908,15 +816,11 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
                                     ceJuValue.wd1 += iw1;
                                     ceJuValue.wd1 = (double) ((long) (ceJuValue.wd1 * 100000000)) / 100000000;
 
-
-//									tv_jingweidu.setText(ceJuValue.jd1 + ","
-//											+ ceJuValue.wd1);
                                 }
 
                                 if (ijwdu[7].length() > 0) {// 有效卫星数
                                     // jingweidu.append(";星数" + ijwdu[7]);
                                     //tv_weixingshu.setTag("星数" + ijwdu[7]);
-
                                 }
                             }
                         }
@@ -955,7 +859,6 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
                                         + ";信噪比" + ijwdu[19] + "\n";
                             }
 
-
                         }
                     } else if (ijwdu[0].indexOf("GPRS") != -1) {// 查到GPRS
                         if (ijwdu.length >= 4) {
@@ -978,9 +881,7 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
                                 } else if (igprsInt < 18) {//
                                     // staGprs.setText("连服务器中:" + igprsInt);
                                 } else if (igprsInt == 20) {// 成功
-                                    // staGprs.setText("成功:" + igprsInt);
-                                    // staGprs.setTextColor(Color.rgb(0, 255,
-                                    // 0));
+
                                 }
                             }
 
@@ -1001,23 +902,23 @@ public   class HomeFragment extends MVPBaseFragment<HomeContract.View, HomePrese
         double wd1 = 0;
     }
 
-
     ShowMyLocation showMyLocation;
+
     public void setMyLocationOnMap(ShowMyLocation showMyLocation) {
         this.showMyLocation = showMyLocation;
     }
 
     //显示位置的接口
-    public interface ShowMyLocation{
-    public abstract void requestShowLocation(LatLng latLng);
+    public interface ShowMyLocation {
+        public abstract void requestShowLocation(LatLng latLng);
     }
-
 
     /**
      * 调用此方法显示 经纬度在地图上  LatLng latLng=new LatLng(30.311045d,120.093018d);
+     *
      * @param latLng 经纬度对象  需要百度的经纬度,记得转换
      */
-    private void  showBeiDouLocation(LatLng latLng){
+    private void showBeiDouLocation(LatLng latLng) {
         if (showMyLocation != null && latLng != null) {
             showMyLocation.requestShowLocation(latLng);
         }

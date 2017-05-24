@@ -8,7 +8,7 @@ import com.example.administrator.beidoulocation.R;
 import com.example.administrator.beidoulocation.offlinemap.DownloadOfflineMap;
 
 /**
- * Created by 瑜哥 on 2017/4/13.
+ * Created by  on 2017/4/13.
  */
 
 public class MyClickListener implements View.OnClickListener {
