@@ -72,6 +72,21 @@
                     android:textColor="#000000"
                     android:textSize="14sp" />
 
+                <RadioButton
+                    android:id="@+id/rb_grid"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableTop="@drawable/rb_bg_grid"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="水温网格"
+                    android:textColor="#000000"
+                    android:textSize="14sp" />
+
+
+
             </RadioGroup>
 
         </LinearLayout>
