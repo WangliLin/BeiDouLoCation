@@ -6,13 +6,17 @@
     android:layout_height="match_parent"
     tools:context="com.example.administrator.beidoulocation.MainActivity">
 
-    <include layout="@layout/toolbar" />
+    <include layout="@layout/toolbar"
+        android:visibility="invisible"/>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/dl_left"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true">
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,7 +48,7 @@
                     android:gravity="center"
                     android:paddingTop="5dp"
                     android:text="首页"
-                    android:textColor="#000000"
+                    android:textColor="@drawable/rb_text_color"
                     android:textSize="14sp" />
 
                 <RadioButton
@@ -57,7 +61,7 @@
                     android:gravity="center"
                     android:paddingTop="5dp"
                     android:text="地形图"
-                    android:textColor="#000000"
+                    android:textColor="@drawable/rb_text_color"
                     android:textSize="14sp" />
                 <RadioButton
                     android:id="@+id/rb_map"
@@ -69,8 +73,24 @@
                     android:gravity="center"
                     android:paddingTop="5dp"
                     android:text="离线地图"
-                    android:textColor="#000000"
+                    android:textColor="@drawable/rb_text_color"
                     android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_grid"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableTop="@drawable/rb_bg_grid"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:text="水温网格"
+                    android:textColor="@drawable/rb_text_color"
+                    android:textSize="14sp" />
+
+
 
             </RadioGroup>
 

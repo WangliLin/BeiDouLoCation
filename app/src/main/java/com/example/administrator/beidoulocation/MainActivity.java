@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.model.LatLng;
 import com.example.administrator.beidoulocation.enum_obj.MapType;
+import com.example.administrator.beidoulocation.grid.GridFragment;
 import com.example.administrator.beidoulocation.home.HomeFragment;
 import com.example.administrator.beidoulocation.listener.MyClickListener;
 import com.example.administrator.beidoulocation.offlinemap.OfflineMapFragment;
@@ -34,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
     private OfflineMapFragment offlineMapFragment;
     private TrrainFragment trrainFragment;
     private HomeFragment homeFragment;
+    private GridFragment gridFragment;
     private TextView tv_downmap;
-    private final int HOME_FRAGMENT = 0, TERRAIN_FRAGMENT = 1, OFFLINE_FRAGMENT = 2;
+    private final int HOME_FRAGMENT = 0, TERRAIN_FRAGMENT = 1, OFFLINE_FRAGMENT = 2, GRID_FRAGMENT = 3;
     private int last_fragment = HOME_FRAGMENT;
     private FragmentManager supportFragmentManager;
 
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         trrainFragment = new TrrainFragment();
         homeFragment = new HomeFragment();
+        gridFragment = new GridFragment();
         homeFragment.setMyLocationOnMap(new HomeFragment.ShowMyLocation() {
             @Override
             public void requestShowLocation(LatLng latLng) {
@@ -68,15 +71,20 @@ public class MainActivity extends AppCompatActivity {
         supportFragmentManager.beginTransaction()
                 .add(R.id.fra_layout, trrainFragment)
                 .add(R.id.fra_layout, homeFragment)
+                .add(R.id.fra_layout, gridFragment)
                 .show(homeFragment)
                 .hide(trrainFragment)
+                .hide(gridFragment)
                 .commit();
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_home:
-                        supportFragmentManager.beginTransaction().show(homeFragment).hide(trrainFragment).commit();
+                        if (last_fragment == TERRAIN_FRAGMENT)
+                            supportFragmentManager.beginTransaction().show(homeFragment).hide(trrainFragment).commit();
+                        else
+                            supportFragmentManager.beginTransaction().show(homeFragment).hide(gridFragment).commit();
                         last_fragment = HOME_FRAGMENT;
                         break;
                     case R.id.rb_trrain:
@@ -86,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.rb_map:
                         switchFragment(OFFLINE_FRAGMENT);
                         last_fragment = OFFLINE_FRAGMENT;
+                        break;
+                    case R.id.rb_grid:
+                        switchFragment(GRID_FRAGMENT);
+                        last_fragment = GRID_FRAGMENT;
+                        break;
+                    default:
                         break;
                 }
             }
@@ -144,12 +158,23 @@ public class MainActivity extends AppCompatActivity {
             case OFFLINE_FRAGMENT:
                 switchMap(targetFargment);
                 break;
+            case GRID_FRAGMENT:
+                if (last_fragment == HOME_FRAGMENT)
+                    supportFragmentManager.beginTransaction().show(gridFragment).hide(homeFragment).commit();
+                else
+                    supportFragmentManager.beginTransaction().show(gridFragment).hide(trrainFragment).commit();
+                break;
+            default:
+                break;
         }
     }
 
     private void switchMap(int targetFargment) {
         if (last_fragment == HOME_FRAGMENT) {
             supportFragmentManager.beginTransaction().show(trrainFragment).hide(homeFragment).commit();
+            switchLayer(targetFargment);
+        } else if (last_fragment == GRID_FRAGMENT) {
+            supportFragmentManager.beginTransaction().show(trrainFragment).hide(gridFragment).commit();
             switchLayer(targetFargment);
         } else {
             switchLayer(targetFargment);
