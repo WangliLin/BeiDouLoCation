@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="低"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/quality_1"
+            android:textSize="@dimen/font_normal" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="稍低"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/quality_2"
+            android:textSize="@dimen/font_normal" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="中下"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/quality_3"
+            android:textSize="@dimen/font_normal" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="中上"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/quality_4"
+            android:textSize="@dimen/font_normal" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="稍高"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/quality_5"
+            android:textSize="@dimen/font_normal" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="高"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/quality_6"
+            android:textSize="@dimen/font_normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/quality_line_h"
+            android:layout_weight="1"
+            android:background="@color/quality_1" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/quality_line_h"
+            android:layout_weight="1"
+            android:background="@color/quality_2" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/quality_line_h"
+            android:layout_weight="1"
+            android:background="@color/quality_3" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/quality_line_h"
+            android:layout_weight="1"
+            android:background="@color/quality_4" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/quality_line_h"
+            android:layout_weight="1"
+            android:background="@color/quality_5" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/quality_line_h"
+            android:layout_weight="1"
+            android:background="@color/quality_6" />
+    </LinearLayout>
+
+</LinearLayout>

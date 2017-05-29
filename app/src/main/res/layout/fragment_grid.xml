@@ -3,14 +3,37 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg">
 
 
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="50dp"
+       android:text="区域水温网格图"
+       android:textSize="30sp"
+       android:layout_margin="10dp"
+       android:textColor="@android:color/white"
+       android:gravity="center"/>
 
    <android.support.v7.widget.RecyclerView
        android:id="@+id/recyView"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:layout_gravity="center"/>
+
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="水温网格颜色说明："
+       android:textColor="@android:color/white"
+       android:layout_marginTop="20dp"
+       android:textSize="20sp"/>
+
+   <include
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      layout="@layout/inc_quality_line" />
 
 </LinearLayout>

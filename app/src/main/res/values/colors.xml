@@ -9,4 +9,14 @@
     <color name="toolbar">#3B9EFF</color>
     <color name="material_green_300">#12AF4D</color>
     <color name="material_green_700">#00963C</color>
+
+    <!-- quality -->
+    <color name="quality_1">#59d6ff</color>
+    <color name="quality_2">#19acf2</color>
+    <color name="quality_3">#5ed522</color>
+    <color name="quality_4">#24b462</color>
+    <color name="quality_5">#ffc20d</color>
+    <color name="quality_6">#ff5605</color>
+
+
 </resources>

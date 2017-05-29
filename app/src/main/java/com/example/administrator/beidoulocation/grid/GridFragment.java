@@ -1,5 +1,6 @@
 package com.example.administrator.beidoulocation.grid;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +26,18 @@ public class GridFragment extends android.support.v4.app.Fragment {
     private List<String> mDatas;
     private HomeAdapter mAdapter;
 
+    int[] colorStr = new int[]{ R.color.quality_3, R.color.quality_4, R.color.quality_5, R.color.quality_6 };
+
+    int[] tempers = new int[] {
+            26, 27, 28, 28, 29, 29, 29,
+            26, 27, 28, 28, 29, 29, 29,
+            26, 27, 27, 28, 29, 29, 29,
+            27, 27, 28, 28, 29, 29, 29,
+            27, 27, 28, 28, 29, 29, 29,
+            28, 28, 28, 28, 29, 29, 29,
+            28, 29, 29, 29, 29, 29, 29
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -46,8 +59,8 @@ public class GridFragment extends android.support.v4.app.Fragment {
 
     protected void initData() {
         mDatas = new ArrayList<String>();
-        for (int i = 1; i < 50; i++) {
-            mDatas.add("" + i);
+        for (int i = 0; i < 49; i++) {
+            mDatas.add("" + tempers[i]);
         }
         mAdapter = new HomeAdapter();
         recyclerView = (RecyclerView) view.findViewById(R.id.recyView);
@@ -76,6 +89,9 @@ public class GridFragment extends android.support.v4.app.Fragment {
         @Override
         public void onBindViewHolder(HomeAdapter.MyViewHolder holder, int position) {
             holder.tv.setText(mDatas.get(position));
+            holder.tv.setTextColor(Color.WHITE);
+            holder.tv.setBackgroundColor(getResources().getColor(colorStr[ tempers[position] % 26]));
+//            holder.tv.setBackgroundColor(getResources().getColor(R.color.quality_1));
         }
 
         @Override
@@ -83,5 +99,17 @@ public class GridFragment extends android.support.v4.app.Fragment {
             return mDatas.size();
         }
     }
+
+
+
+    /*
+
+    private int showColor(String temper) {
+
+        double temp = Double.parseDouble(temper);
+
+        return colorStr[(int) temp/7];
+
+    }*/
 
 }
